@@ -44,6 +44,9 @@
 @interface ThumbsViewController : UIViewController
 
 @property (nonatomic, weak, readwrite) id <ThumbsViewControllerDelegate> delegate;
+@property (nonatomic) BOOL thumbnailsOnly;
+@property (nonatomic) BOOL displayShadow;
+@property (nonatomic) UIColor *thumbnailsBackgroundColor;
 
 - (instancetype)initWithReaderDocument:(ReaderDocument *)object;
 
@@ -56,6 +59,8 @@
 //
 
 @interface ThumbsPageThumb : ReaderThumbView
+
+@property (nonatomic) BOOL displayShadow;
 
 - (CGSize)maximumContentSize;
 

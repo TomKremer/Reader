@@ -65,6 +65,7 @@ static CGFloat g_BugFixWidthInset = 0.0f;
 #pragma mark - Properties
 
 @synthesize message;
+@synthesize displayShadow = _displayShadow;
 
 #pragma mark - ReaderContentView functions
 
@@ -154,11 +155,11 @@ static inline CGFloat zoomScaleThatFits(CGSize target, CGSize source)
 			theContainerView.backgroundColor = [UIColor whiteColor];
 
 #if (READER_SHOW_SHADOWS == TRUE) // Option
-
-			theContainerView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
-			theContainerView.layer.shadowRadius = 4.0f; theContainerView.layer.shadowOpacity = 1.0f;
-			theContainerView.layer.shadowPath = [UIBezierPath bezierPathWithRect:theContainerView.bounds].CGPath;
-
+			if (_displayShadow) {
+				theContainerView.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
+				theContainerView.layer.shadowRadius = 4.0f; theContainerView.layer.shadowOpacity = 1.0f;
+				theContainerView.layer.shadowPath = [UIBezierPath bezierPathWithRect:theContainerView.bounds].CGPath;
+			}
 #endif // end of READER_SHOW_SHADOWS Option
 
 			self.contentSize = theContentPage.bounds.size; [self centerScrollViewContent];

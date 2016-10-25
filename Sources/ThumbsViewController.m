@@ -64,6 +64,9 @@
 #pragma mark - Properties
 
 @synthesize delegate;
+@synthesize thumbnailsOnly = _thumbnailsOnly;
+@synthesize displayShadow = _displayShadow;
+@synthesize thumbnailsBackgroundColor = _thumbnailsBackgroundColor;
 
 #pragma mark - UIViewController methods
 
@@ -74,7 +77,10 @@
 		if ((object != nil) && ([object isKindOfClass:[ReaderDocument class]])) // Valid object
 		{
 			updateBookmarked = YES; bookmarked = [NSMutableArray new]; // Bookmarked pages
-
+			
+			_thumbnailsBackgroundColor = [UIColor grayColor]; // Default background color
+			_thumbnailsOnly = NO; // Default is normal view-mode
+			
 			document = object; // Retain the ReaderDocument object for our use
 		}
 		else // Invalid ReaderDocument object
@@ -92,8 +98,8 @@
 
 	assert(delegate != nil); assert(document != nil);
 
-	self.view.backgroundColor = [UIColor grayColor]; // Neutral gray
-
+	self.view.backgroundColor = _thumbnailsBackgroundColor; // Use customizable color
+	
 	CGRect scrollViewRect = self.view.bounds; UIView *fakeStatusBar = nil;
 
 	if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) // iOS 7+
@@ -284,7 +290,9 @@
 
 - (id)thumbsView:(ReaderThumbsView *)thumbsView thumbCellWithFrame:(CGRect)frame
 {
-	return [[ThumbsPageThumb alloc] initWithFrame:frame];
+	ThumbsPageThumb *thumb = [[ThumbsPageThumb alloc] initWithFrame:frame];
+	thumb.displayShadow = _displayShadow;
+	return thumb;
 }
 
 - (void)thumbsView:(ReaderThumbsView *)thumbsView updateThumbCell:(ThumbsPageThumb *)thumbCell forIndex:(NSInteger)index
@@ -316,10 +324,11 @@
 - (void)thumbsView:(ReaderThumbsView *)thumbsView didSelectThumbWithIndex:(NSInteger)index
 {
 	NSInteger page = (showBookmarked ? [[bookmarked objectAtIndex:index] integerValue] : (index + 1));
-
-	[delegate thumbsViewController:self gotoPage:page]; // Show the selected page
-
-	[delegate dismissThumbsViewController:self]; // Dismiss thumbs display
+	if(!_thumbnailsOnly) {
+		[delegate thumbsViewController:self gotoPage:page]; // Show the selected page
+		
+		[delegate dismissThumbsViewController:self]; // Dismiss thumbs display
+	}
 }
 
 - (void)thumbsView:(ReaderThumbsView *)thumbsView didPressThumbWithIndex:(NSInteger)index
@@ -353,6 +362,8 @@
 
 	CGRect defaultRect;
 }
+
+@synthesize displayShadow = _displayShadow;
 
 #pragma mark - Constants
 
@@ -411,11 +422,11 @@
 		backView.backgroundColor = [UIColor whiteColor];
 
 #if (READER_SHOW_SHADOWS == TRUE) // Option
-
-		backView.layer.shadowOffset = CGSizeMake(0.0f, 1.0f);
-		backView.layer.shadowRadius = 3.0f; backView.layer.shadowOpacity = 1.0f;
-		backView.layer.shadowPath = [UIBezierPath bezierPathWithRect:backView.bounds].CGPath;
-
+		if(_displayShadow) {
+			backView.layer.shadowOffset = CGSizeMake(0.0f, 1.0f);
+			backView.layer.shadowRadius = 3.0f; backView.layer.shadowOpacity = 1.0f;
+			backView.layer.shadowPath = [UIBezierPath bezierPathWithRect:backView.bounds].CGPath;
+		}
 #endif // end of READER_SHOW_SHADOWS Option
 
 		[self insertSubview:backView belowSubview:textLabel];

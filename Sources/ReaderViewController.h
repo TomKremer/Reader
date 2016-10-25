@@ -40,6 +40,10 @@
 @interface ReaderViewController : UIViewController
 
 @property (nonatomic, weak, readwrite) id <ReaderViewControllerDelegate> delegate;
+@property (nonatomic) BOOL thumbnailsOnly;
+@property (nonatomic) BOOL displayShadow;
+@property (nonatomic) UIColor *documentBackgroundColor;
+@property (nonatomic) UIColor *thumbnailsBackgroundColor;
 
 - (instancetype)initWithReaderDocument:(ReaderDocument *)object;
 

@@ -42,6 +42,7 @@
 @interface ReaderContentView : UIScrollView
 
 @property (nonatomic, weak, readwrite) id <ReaderContentViewDelegate> message;
+@property (nonatomic) BOOL displayShadow;
 
 - (instancetype)initWithFrame:(CGRect)frame fileURL:(NSURL *)fileURL page:(NSUInteger)page password:(NSString *)phrase;
 

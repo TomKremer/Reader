@@ -82,6 +82,10 @@
 #pragma mark - Properties
 
 @synthesize delegate;
+@synthesize thumbnailsOnly = _thumbnailsOnly;
+@synthesize displayShadow = _displayShadow;
+@synthesize documentBackgroundColor = _documentBackgroundColor;
+@synthesize thumbnailsBackgroundColor = _thumbnailsBackgroundColor;
 
 #pragma mark - ReaderViewController methods
 
@@ -134,6 +138,7 @@
 	NSURL *fileURL = document.fileURL; NSString *phrase = document.password; NSString *guid = document.guid; // Document properties
 
 	ReaderContentView *contentView = [[ReaderContentView alloc] initWithFrame:viewRect fileURL:fileURL page:page password:phrase]; // ReaderContentView
+	contentView.displayShadow = _displayShadow; // Pass shadow setting to ReaderContentView
 
 	contentView.message = self; [contentViews setObject:contentView forKey:[NSNumber numberWithInteger:page]]; [scrollView addSubview:contentView];
 
@@ -258,10 +263,19 @@
 - (void)showDocument
 {
 	[self updateContentSize:theScrollView]; // Update content size first
-
-	[self showDocumentPage:[document.pageNumber integerValue]]; // Show page
-
+	
+	if(!_thumbnailsOnly){
+		[self showDocumentPage:[document.pageNumber integerValue]]; // Show page
+	}else{
+		[self showDocumentPage:-1]; // Will not return a page
+	}
+	
 	document.lastOpen = [NSDate date]; // Update document last opened date
+	
+	if(_thumbnailsOnly)
+	{
+		[self showThumbsViewController];
+	}
 }
 
 - (void)closeDocument
@@ -292,6 +306,9 @@
 	{
 		if ((object != nil) && ([object isKindOfClass:[ReaderDocument class]])) // Valid object
 		{
+			_thumbnailsOnly = NO; // Default Document View-Mode
+			_documentBackgroundColor = [UIColor grayColor]; // Default Background Color
+            
 			userInterfaceIdiom = [UIDevice currentDevice].userInterfaceIdiom; // User interface idiom
 
 			NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter]; // Default notification center
@@ -326,7 +343,7 @@
 
 	assert(document != nil); // Must have a valid ReaderDocument
 
-	self.view.backgroundColor = [UIColor grayColor]; // Neutral gray
+	self.view.backgroundColor = _documentBackgroundColor; // Customizable color
 
 	UIView *fakeStatusBar = nil; CGRect viewRect = self.view.bounds; // View bounds
 
@@ -721,19 +738,28 @@
 
 - (void)tappedInToolbar:(ReaderMainToolbar *)toolbar thumbsButton:(UIButton *)button
 {
+	[self showThumbsViewController];
+}
+
+- (void)showThumbsViewController
+{
 #if (READER_ENABLE_THUMBS == TRUE) // Option
-
+	
 	if (printInteraction != nil) [printInteraction dismissAnimated:NO];
-
+	
 	ThumbsViewController *thumbsViewController = [[ThumbsViewController alloc] initWithReaderDocument:document];
-
+	
 	thumbsViewController.title = self.title; thumbsViewController.delegate = self; // ThumbsViewControllerDelegate
-
+	
 	thumbsViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
 	thumbsViewController.modalPresentationStyle = UIModalPresentationFullScreen;
-
+	
+	thumbsViewController.displayShadow = _displayShadow; // Pass shadow setting to ThumbsViewController
+	thumbsViewController.thumbnailsBackgroundColor = _thumbnailsBackgroundColor; // Pass in thumbnail background color
+	thumbsViewController.thumbnailsOnly = _thumbnailsOnly; // Pass in view-mode
+	
 	[self presentViewController:thumbsViewController animated:NO completion:NULL];
-
+	
 #endif // end of READER_ENABLE_THUMBS Option
 }
 
@@ -868,18 +894,20 @@
 - (void)thumbsViewController:(ThumbsViewController *)viewController gotoPage:(NSInteger)page
 {
 #if (READER_ENABLE_THUMBS == TRUE) // Option
-
-	[self showDocumentPage:page];
-
+	if(!_thumbnailsOnly) {
+		[self showDocumentPage:page];
+	}
 #endif // end of READER_ENABLE_THUMBS Option
 }
 
 - (void)dismissThumbsViewController:(ThumbsViewController *)viewController
 {
 #if (READER_ENABLE_THUMBS == TRUE) // Option
-
-	[self dismissViewControllerAnimated:NO completion:NULL];
-
+	if(!_thumbnailsOnly) {
+		[self dismissViewControllerAnimated:NO completion:NULL];
+	}else{
+		[self closeDocument];
+	}
 #endif // end of READER_ENABLE_THUMBS Option
 }
 

@@ -177,10 +177,22 @@
 	NSString *filePath = [pdfs firstObject]; assert(filePath != nil); // Path to first PDF file
 
 	ReaderDocument *document = [ReaderDocument withDocumentFilePath:filePath password:phrase];
+	document.displayName = @"Nice Title";
+	
+	// Customize Toolbar
+	document.canEmail = NO;
+	document.canExport = NO;
+	document.canPrint = NO;
 
 	if (document != nil) // Must have a valid ReaderDocument object in order to proceed with things
 	{
 		ReaderViewController *readerViewController = [[ReaderViewController alloc] initWithReaderDocument:document];
+		
+		// Customize Document Background and Shadow
+		readerViewController.documentBackgroundColor = [UIColor grayColor];
+		readerViewController.thumbnailsBackgroundColor = [UIColor grayColor];
+		readerViewController.displayShadow = NO;
+		readerViewController.thumbnailsOnly = YES; // Will only show the thumbnail view of the document.
 
 		readerViewController.delegate = self; // Set the ReaderViewController delegate to self
 

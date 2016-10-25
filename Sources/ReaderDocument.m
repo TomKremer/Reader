@@ -71,7 +71,8 @@
 @synthesize password = _password;
 @synthesize filePath = _filePath;
 @dynamic fileName, fileURL;
-@dynamic canEmail, canExport, canPrint;
+@synthesize displayName = _displayName;
+@synthesize canEmail = _canEmail, canExport = _canExport, canPrint = _canPrint;
 
 #pragma mark - ReaderDocument class methods
 
@@ -158,6 +159,8 @@
 	{
 		document = [[ReaderDocument alloc] initWithFilePath:filePath password:phrase];
 	}
+    
+	document.displayName = [[document.fileName copy] stringByDeletingPathExtension]; // Default Display-Name
 
 	return document;
 }
@@ -255,21 +258,6 @@
 	if (_fileURL == nil) _fileURL = [[NSURL alloc] initFileURLWithPath:_filePath isDirectory:NO];
 
 	return _fileURL;
-}
-
-- (BOOL)canEmail
-{
-	return YES;
-}
-
-- (BOOL)canExport
-{
-	return YES;
-}
-
-- (BOOL)canPrint
-{
-	return YES;
 }
 
 - (BOOL)archiveDocumentProperties

@@ -37,10 +37,11 @@
 @property (nonatomic, strong, readonly) NSString *password;
 @property (nonatomic, strong, readonly) NSString *fileName;
 @property (nonatomic, strong, readonly) NSURL *fileURL;
+@property (nonatomic, strong) NSString *displayName;
 
-@property (nonatomic, readonly) BOOL canEmail;
-@property (nonatomic, readonly) BOOL canExport;
-@property (nonatomic, readonly) BOOL canPrint;
+@property (nonatomic) BOOL canEmail;
+@property (nonatomic) BOOL canExport;
+@property (nonatomic) BOOL canPrint;
 
 + (ReaderDocument *)withDocumentFilePath:(NSString *)filePath password:(NSString *)phrase;
 
