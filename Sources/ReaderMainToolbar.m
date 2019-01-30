@@ -221,7 +221,7 @@
 
 		if (largeDevice == YES) // Show document filename in toolbar
 		{
-			CGRect titleRect = CGRectMake(titleX, BUTTON_Y, titleWidth, TITLE_HEIGHT);
+			CGRect titleRect = CGRectMake(titleX, frame.size.height - BUTTON_Y - TITLE_HEIGHT, titleWidth, TITLE_HEIGHT);
 
 			UILabel *titleLabel = [[UILabel alloc] initWithFrame:titleRect];
 
