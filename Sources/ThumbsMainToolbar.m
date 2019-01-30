@@ -83,7 +83,7 @@
 		CGFloat doneButtonWidth = (ceil(doneButtonSize.width) + TEXT_BUTTON_PADDING);
 
 		UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		doneButton.frame = CGRectMake(leftButtonX, BUTTON_Y, doneButtonWidth, BUTTON_HEIGHT);
+		doneButton.frame = CGRectMake(leftButtonX, frame.size.height - BUTTON_Y - BUTTON_HEIGHT, doneButtonWidth, BUTTON_HEIGHT);
 		[doneButton setTitleColor:[UIColor colorWithWhite:0.0f alpha:1.0f] forState:UIControlStateNormal];
 		[doneButton setTitleColor:[UIColor colorWithWhite:1.0f alpha:1.0f] forState:UIControlStateHighlighted];
 		[doneButton setTitle:doneButtonText forState:UIControlStateNormal]; doneButton.titleLabel.font = doneButtonFont;
@@ -109,7 +109,7 @@
 		BOOL useTint = [self respondsToSelector:@selector(tintColor)]; // iOS 7 and up
 
 		UISegmentedControl *showControl = [[UISegmentedControl alloc] initWithItems:buttonItems];
-		showControl.frame = CGRectMake(showControlX, BUTTON_Y, SHOW_CONTROL_WIDTH, BUTTON_HEIGHT);
+		showControl.frame = CGRectMake(showControlX, frame.size.height - BUTTON_Y - BUTTON_HEIGHT, SHOW_CONTROL_WIDTH, BUTTON_HEIGHT);
 		showControl.tintColor = (useTint ? [UIColor blackColor] : [UIColor colorWithWhite:0.8f alpha:1.0f]);
 		showControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
 		//showControl.segmentedControlStyle = UISegmentedControlStyleBar;
@@ -127,7 +127,7 @@
 
 		if (largeDevice == YES) // Show document filename in toolbar
 		{
-			CGRect titleRect = CGRectMake(titleX, BUTTON_Y, titleWidth, TITLE_HEIGHT);
+			CGRect titleRect = CGRectMake(titleX, frame.size.height - BUTTON_Y - TITLE_HEIGHT, titleWidth, TITLE_HEIGHT);
 
 			UILabel *titleLabel = [[UILabel alloc] initWithFrame:titleRect];
 

@@ -67,6 +67,7 @@
 @synthesize thumbnailsOnly = _thumbnailsOnly;
 @synthesize displayShadow = _displayShadow;
 @synthesize thumbnailsBackgroundColor = _thumbnailsBackgroundColor;
+@synthesize statusBarHeight = _statusBarHeight;
 
 #pragma mark - UIViewController methods
 
@@ -102,6 +103,7 @@
 	
 	CGRect scrollViewRect = self.view.bounds; UIView *fakeStatusBar = nil;
 
+	/*
 	if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) // iOS 7+
 	{
 		if ([self prefersStatusBarHidden] == NO) // Visible status bar
@@ -117,11 +119,12 @@
 			scrollViewRect.origin.y += STATUS_HEIGHT; scrollViewRect.size.height -= STATUS_HEIGHT;
 		}
 	}
+	 */
 
 	NSString *toolbarTitle = document.displayName; // use same title as document
 
 	CGRect toolbarRect = scrollViewRect; // Toolbar frame
-	toolbarRect.size.height = TOOLBAR_HEIGHT; // Default toolbar height
+	toolbarRect.size.height = TOOLBAR_HEIGHT + _statusBarHeight; // Default toolbar height
 	mainToolbar = [[ThumbsMainToolbar alloc] initWithFrame:toolbarRect title:toolbarTitle]; // ThumbsMainToolbar
 	mainToolbar.delegate = self; // ThumbsMainToolbarDelegate
 	[self.view addSubview:mainToolbar];

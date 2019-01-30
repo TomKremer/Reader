@@ -95,7 +95,7 @@
 		CGFloat doneButtonWidth = (ceil(doneButtonSize.width) + TEXT_BUTTON_PADDING);
 
 		UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		doneButton.frame = CGRectMake(leftButtonX, BUTTON_Y, doneButtonWidth, BUTTON_HEIGHT);
+		doneButton.frame = CGRectMake(leftButtonX, frame.size.height - BUTTON_Y - BUTTON_HEIGHT, doneButtonWidth, BUTTON_HEIGHT);
 		[doneButton setTitleColor:[UIColor colorWithWhite:0.0f alpha:1.0f] forState:UIControlStateNormal];
 		[doneButton setTitleColor:[UIColor colorWithWhite:1.0f alpha:1.0f] forState:UIControlStateHighlighted];
 		[doneButton setTitle:doneButtonText forState:UIControlStateNormal]; doneButton.titleLabel.font = doneButtonFont;
@@ -115,7 +115,7 @@
 #if (READER_ENABLE_THUMBS == TRUE) // Option
 
 		UIButton *thumbsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		thumbsButton.frame = CGRectMake(leftButtonX, BUTTON_Y, iconButtonWidth, BUTTON_HEIGHT);
+		thumbsButton.frame = CGRectMake(leftButtonX, frame.size.height - BUTTON_Y - BUTTON_HEIGHT, iconButtonWidth, BUTTON_HEIGHT);
 		[thumbsButton setImage:[UIImage imageNamed:@"Reader-Thumbs"] forState:UIControlStateNormal];
 		[thumbsButton addTarget:self action:@selector(thumbsButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
 		[thumbsButton setBackgroundImage:buttonH forState:UIControlStateHighlighted];
@@ -137,7 +137,7 @@
 		rightButtonX -= (iconButtonWidth + buttonSpacing); // Position
 
 		UIButton *flagButton = [UIButton buttonWithType:UIButtonTypeCustom];
-		flagButton.frame = CGRectMake(rightButtonX, BUTTON_Y, iconButtonWidth, BUTTON_HEIGHT);
+		flagButton.frame = CGRectMake(rightButtonX, frame.size.height - BUTTON_Y - BUTTON_HEIGHT, iconButtonWidth, BUTTON_HEIGHT);
 		//[flagButton setImage:[UIImage imageNamed:@"Reader-Mark-N"] forState:UIControlStateNormal];
 		[flagButton addTarget:self action:@selector(markButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
 		[flagButton setBackgroundImage:buttonH forState:UIControlStateHighlighted];

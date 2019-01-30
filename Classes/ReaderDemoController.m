@@ -107,6 +107,12 @@
 - (void)viewDidAppear:(BOOL)animated
 {
 	[super viewDidAppear:animated];
+	
+	// Safe Area Update
+	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+	CGFloat height = MIN(statusBarSize.width, statusBarSize.height);
+	//UIEdgeInsets insets =  self.view.safeAreaInsets;
+	NSLog(@"Top Safe Area inset %f.", height);
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -186,13 +192,17 @@
 
 	if (document != nil) // Must have a valid ReaderDocument object in order to proceed with things
 	{
+		CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+		CGFloat height = MIN(statusBarSize.width, statusBarSize.height);
+		
 		ReaderViewController *readerViewController = [[ReaderViewController alloc] initWithReaderDocument:document];
 		
 		// Customize Document Background and Shadow
 		readerViewController.documentBackgroundColor = [UIColor grayColor];
 		readerViewController.thumbnailsBackgroundColor = [UIColor grayColor];
 		readerViewController.displayShadow = NO;
-		readerViewController.thumbnailsOnly = YES; // Will only show the thumbnail view of the document.
+		readerViewController.thumbnailsOnly = NO; // Will only show the thumbnail view of the document.
+		readerViewController.statusBarHeight = height;
 
 		readerViewController.delegate = self; // Set the ReaderViewController delegate to self
 

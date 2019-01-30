@@ -1,6 +1,13 @@
 
 ## History
 
+2016-09-28: Version 2.8.9
+
+	- Toolbar is customizable (Export, Print, Email, Title)
+	- ReaderDocument is customizable (Background Color, Shadow)
+	- Thumbnail browser is customizable (Background color, Shadow)
+	- New Demo Mode is only showing PDF using thumbnails
+
 2016-09-28: Version 2.8.8
 
 	- iOS deployment target is now 8.0

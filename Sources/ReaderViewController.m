@@ -69,7 +69,7 @@
 
 #pragma mark - Constants
 
-#define STATUS_HEIGHT 20.0f
+#define STATUS_HEIGHT 44.0f
 
 #define TOOLBAR_HEIGHT 44.0f
 #define PAGEBAR_HEIGHT 48.0f
@@ -86,6 +86,7 @@
 @synthesize displayShadow = _displayShadow;
 @synthesize documentBackgroundColor = _documentBackgroundColor;
 @synthesize thumbnailsBackgroundColor = _thumbnailsBackgroundColor;
+@synthesize statusBarHeight = _statusBarHeight;
 
 #pragma mark - ReaderViewController methods
 
@@ -349,17 +350,24 @@
 
 	if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) // iOS 7+
 	{
-		if ([self prefersStatusBarHidden] == NO) // Visible status bar
-		{
-			CGRect statusBarRect = viewRect; statusBarRect.size.height = STATUS_HEIGHT;
+		//if ([self prefersStatusBarHidden] == NO) // Visible status bar
+		//{
+		/*
+			CGRect statusBarRect = viewRect;
+			//statusBarRect.size.height = STATUS_HEIGHT;
+			statusBarRect.size.height = _statusBarHeight;
 			fakeStatusBar = [[UIView alloc] initWithFrame:statusBarRect]; // UIView
 			fakeStatusBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-			fakeStatusBar.backgroundColor = [UIColor blackColor];
+		fakeStatusBar.backgroundColor = [UIColor colorWithWhite:0.94f alpha:0.94f];
 			fakeStatusBar.contentMode = UIViewContentModeRedraw;
 			fakeStatusBar.userInteractionEnabled = NO;
-
-			viewRect.origin.y += STATUS_HEIGHT; viewRect.size.height -= STATUS_HEIGHT;
-		}
+		 */
+		
+			//viewRect.origin.y += STATUS_HEIGHT;
+			//viewRect.origin.y += _statusBarHeight;
+			//viewRect.size.height -= STATUS_HEIGHT;
+			//viewRect.size.height -= _statusBarHeight;
+		//}
 	}
 
 	CGRect scrollViewRect = CGRectInset(viewRect, -scrollViewOutset, 0.0f);
@@ -371,7 +379,7 @@
 	theScrollView.backgroundColor = [UIColor clearColor]; theScrollView.delegate = self;
 	[self.view addSubview:theScrollView];
 
-	CGRect toolbarRect = viewRect; toolbarRect.size.height = TOOLBAR_HEIGHT;
+	CGRect toolbarRect = viewRect; toolbarRect.size.height = TOOLBAR_HEIGHT + _statusBarHeight;
 	mainToolbar = [[ReaderMainToolbar alloc] initWithFrame:toolbarRect document:document]; // ReaderMainToolbar
 	mainToolbar.delegate = self; // ReaderMainToolbarDelegate
 	[self.view addSubview:mainToolbar];
@@ -445,6 +453,12 @@
 	[UIApplication sharedApplication].idleTimerDisabled = NO;
 
 #endif // end of READER_DISABLE_IDLE Option
+	
+	// Safe Area Update
+	CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+	CGFloat height = MIN(statusBarSize.width, statusBarSize.height);
+	//UIEdgeInsets insets =  self.view.safeAreaInsets;
+	NSLog(@"Top Safe Area inset %f.", height);
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -757,6 +771,7 @@
 	thumbsViewController.displayShadow = _displayShadow; // Pass shadow setting to ThumbsViewController
 	thumbsViewController.thumbnailsBackgroundColor = _thumbnailsBackgroundColor; // Pass in thumbnail background color
 	thumbsViewController.thumbnailsOnly = _thumbnailsOnly; // Pass in view-mode
+	thumbsViewController.statusBarHeight = _statusBarHeight;
 	
 	[self presentViewController:thumbsViewController animated:NO completion:NULL];
 	

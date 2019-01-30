@@ -45,6 +45,7 @@
 
 @property (nonatomic, weak, readwrite) id <ThumbsViewControllerDelegate> delegate;
 @property (nonatomic) BOOL thumbnailsOnly;
+@property (nonatomic) CGFloat statusBarHeight;
 @property (nonatomic) BOOL displayShadow;
 @property (nonatomic) UIColor *thumbnailsBackgroundColor;
 
